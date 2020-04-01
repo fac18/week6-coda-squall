@@ -1,110 +1,114 @@
-const tape = require("tape");
-const runDbBuild = require("../src/database/db_build");
-const getData = require("../src/queries/getData");
-const postData = require("../src/queries/postData");
+const fs = require('fs')
+const tape = require('tape')
+const dbQuery = require('../src/database/db_query')
+const getData = require('../src/queries/getData')
+const postData = require('../src/queries/postData')
+const sql = fs
+  .readFileSync(`${__dirname}/../src/database/db_schema.sql`)
+  .toString()
 
-tape("Tape is working", t => {
-  t.equal(1, 1, "one is equal to one");
-  t.end();
-});
+tape('Tape is working', t => {
+  t.equal(1, 1, 'one is equal to one')
+  t.end()
+})
 
-tape("Get all powers", t => {
-  runDbBuild((err, res) => {
-    if (err) console.log(err);
-    return;
-  });
+tape('Get all powers', t => {
+  dbQuery(sql, (err, res) => {
+    if (err) console.log(err)
+    return
+  })
   let expected = [
     {
       id: 1,
-      name: "Electricity",
-      description: "Description here...",
-      image_path: "electricity.png"
+      name: 'Electricity',
+      description: 'Description here...',
+      image_path: 'electricity.png',
     },
     {
       id: 2,
-      name: "Radiation",
-      description: "Description here...",
-      image_path: "radiation.png"
+      name: 'Radiation',
+      description: 'Description here...',
+      image_path: 'radiation.png',
     },
     {
       id: 3,
-      name: "Punch",
-      description: "Description here...",
-      image_path: "punch.png"
+      name: 'Punch',
+      description: 'Description here...',
+      image_path: 'punch.png',
     },
     {
       id: 4,
-      name: "Clairvoyance",
-      description: "Description here...",
-      image_path: "clairvoyance.png"
+      name: 'Clairvoyance',
+      description: 'Description here...',
+      image_path: 'clairvoyance.png',
     },
     {
       id: 5,
-      name: "Telekinesis",
-      description: "Description here...",
-      image_path: "telekinesis.png"
+      name: 'Telekinesis',
+      description: 'Description here...',
+      image_path: 'telekinesis.png',
     },
     {
       id: 6,
-      name: "Shape shifting",
-      description: "Description here...",
-      image_path: "shape-shifting.png"
+      name: 'Shape shifting',
+      description: 'Description here...',
+      image_path: 'shape-shifting.png',
     },
     {
       id: 7,
-      name: "Time manipulation",
-      description: "Description here...",
-      image_path: "time-manipulation.png"
-    }
-  ];
+      name: 'Time manipulation',
+      description: 'Description here...',
+      image_path: 'time-manipulation.png',
+    },
+  ]
   getData.getPow((err, res) => {
-    if (err) return err;
-    t.deepEqual(res, expected, "Should return all the powers");
-    t.end();
-  });
-});
+    if (err) return err
+    t.deepEqual(res, expected, 'Should return all the powers')
+    t.end()
+  })
+})
 
-tape("Create character", t => {
-  runDbBuild((err, res) => {
-    if (err) console.log(err);
-    return;
-  });
+tape('Create character', t => {
+  dbQuery(sql, (err, res) => {
+    if (err) console.log(err)
+    return
+  })
   let expected = {
-    command: "INSERT",
-    rowCount: 1
-  };
+    command: 'INSERT',
+    rowCount: 1,
+  }
   let character = {
-    name: "Heroku",
-    talisman: "enchanted amulet",
+    name: 'Heroku',
+    talisman: 'enchanted amulet',
     powers_id: 3,
-    battle_cry: "Your app isn't working"
-  };
+    battle_cry: "Your app isn't working",
+  }
   postData(character, (err, res) => {
-    if (err) return err;
-    t.deepEqual(res.command, expected.command, "Command should be INSERT");
-    t.deepEqual(res.rowCount, expected.rowCount, "New rows should be 1");
-    t.end();
-  });
-});
+    if (err) return err
+    t.deepEqual(res.command, expected.command, 'Command should be INSERT')
+    t.deepEqual(res.rowCount, expected.rowCount, 'New rows should be 1')
+    t.end()
+  })
+})
 
-tape("Get specific character", t => {
-  runDbBuild((err, res) => {
-    if (err) console.log(err);
-    return;
-  });
+tape('Get specific character', t => {
+  dbQuery(sql, (err, res) => {
+    if (err) console.log(err)
+    return
+  })
   let expected = [
     {
       id: 1,
-      name: "Travis",
+      name: 'Travis',
       powers_id: 4,
-      talisman: "golden moustache",
-      battle_cry: "Your build is not passing",
-      score: 0
-    }
-  ];
-  getData.getChar("Travis", (err, res) => {
-    if (err) return err;
-    t.deepEqual(res, expected, "Should return the character Travis");
-    t.end();
-  });
-});
+      talisman: 'golden moustache',
+      battle_cry: 'Your build is not passing',
+      score: 0,
+    },
+  ]
+  getData.getChar('Travis', (err, res) => {
+    if (err) return err
+    t.deepEqual(res, expected, 'Should return the character Travis')
+    t.end()
+  })
+})
