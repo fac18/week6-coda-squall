@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/fac18/week6-coda-squall#readme",
   "devDependencies": {
-    "codecov": "^3.6.5",
+    "codecov": "^3.7.1",
     "dotenv": "^8.2.0",
     "nodemon": "^2.0.2",
     "nyc": "^15.0.0",
